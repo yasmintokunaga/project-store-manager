@@ -32,9 +32,21 @@ const productFromModel = {
     name: 'Martelo de Thor',
   };
 
+const newProductFromDb = {
+  id: 4,
+  name: 'ProdutoX',
+};
+
+const newProductFromModel = {
+  id: 4,
+  name: 'ProdutoX',
+};
+
 module.exports = {
   productsFromDB,
   productsFromModel,
   productFromDB,
   productFromModel,
+  newProductFromDb,
+  newProductFromModel,
 };

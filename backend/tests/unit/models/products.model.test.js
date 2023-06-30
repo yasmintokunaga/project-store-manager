@@ -7,6 +7,8 @@ const {
   productsFromModel,
   productFromDB,
   productFromModel,
+  newProductFromDb,
+  newProductFromModel,
 } = require('../mocks/products.mock');
 
 describe('Realizando testes - PRODUCTS MODEL:', function () {
@@ -28,5 +30,13 @@ describe('Realizando testes - PRODUCTS MODEL:', function () {
     const product = await productsModel.findById(1);
 
     expect(product).to.be.deep.equal(productFromModel);
+  });
+
+  it('Adicionando um novo produto', async function () {
+    sinon.stub(connection, 'execute').resolves([[newProductFromDb]]);
+
+    const newProduct = await productsModel.addNewProduct(newProductFromDb.name);
+
+    expect(newProduct).to.be.deep.equal(newProductFromModel);
   });
 });
