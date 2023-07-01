@@ -77,4 +77,30 @@ describe('Realizando testes - PRODUCTS SERVICE:', function () {
     expect(res.status).to.have.been.calledWith(201);
     expect(res.json).to.have.been.calledWith(newProductFromModel);
   });
+
+  it('Adicionando um novo produto sem passar o campo "name"', async function () {
+    const req = { body: {} };
+    const res = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.stub(),
+    };
+    
+    await productsController.addNewProduct(req, res);
+
+    expect(res.status).to.have.been.calledWith(400);
+    expect(res.json).to.have.been.calledWith({ message: '"name" is required' });
+  });
+
+  it('Adicionando um novo produto com o campo "name" com menos de 5 caracteres', async function () {
+    const req = { body: { name: 'ola' } };
+    const res = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.stub(),
+    };
+    
+    await productsController.addNewProduct(req, res);
+
+    expect(res.status).to.have.been.calledWith(400);
+    expect(res.json).to.have.been.calledWith({ message: '"name" length must be at least 5 characters long' });
+  });
 });
