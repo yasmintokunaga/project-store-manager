@@ -60,7 +60,7 @@ describe('Realizando testes - PRODUCTS SERVICE:', function () {
     await productsController.findById(req, res);
 
     expect(res.status).to.have.been.calledWith(404);
-    expect(res.json).to.have.been.calledWith('Product not found');
+    expect(res.json).to.have.been.calledWith({ message: 'Product not found' });
   });
 
   it('Adicionando um novo produto', async function () {

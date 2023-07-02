@@ -30,7 +30,30 @@ const findById = async (id) => {
   return findId;
 };
 
+const addNewSale = async (sale) => {
+  const [insertNewSale] = await connection.execute(
+    'INSERT INTO StoreManager.sales (date) VALUES (DEFAULT);',
+  );
+
+  const saleId = insertNewSale.insertId;
+  const values = sale
+    .map(({ productId, quantity }) => (`(${saleId}, ${productId}, ${quantity})`)).join(', ');
+
+  const query = 'INSERT INTO StoreManager.sales_products (sale_id, product_id, quantity) VALUES'
+    + `${values}`;
+  await connection.execute(query);
+
+  const insertProducts = await findById(saleId);
+
+  const newInsertion = {
+    id: insertNewSale.insertId,
+    itemsSold: insertProducts.map(({ productId, quantity }) => ({ productId, quantity })),
+  };
+  return newInsertion;
+};
+
 module.exports = {
   listAllSales,
   findById,
+  addNewSale,
 };
