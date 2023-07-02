@@ -9,6 +9,9 @@ const listAllSales = async (_req, res) => {
 const findById = async (req, res) => {
   const { id } = req.params;
   const { status, data } = await salesService.findById(id);
+  if (status === 'NOT_FOUND') {
+    return res.status(mapStatusHTTP(status)).json({ message: data });
+  }
   return res.status(mapStatusHTTP(status)).json(data);
 };
 

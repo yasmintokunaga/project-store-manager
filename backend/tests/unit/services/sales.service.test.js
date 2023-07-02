@@ -26,7 +26,7 @@ describe('Realizando testes - SALES SERVICE:', function () {
   });
 
   it('Recuperando uma venda por id que não existe', async function () {
-    sinon.stub(salesModel, 'findById').resolves(undefined);
+    sinon.stub(salesModel, 'findById').resolves([]);
 
     const response = await salesService.findById(99);
 

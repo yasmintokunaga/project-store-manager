@@ -56,6 +56,6 @@ describe('Realizando testes - SALES SERVICE:', function () {
     await salesController.findById(req, res);
 
     expect(res.status).to.have.been.calledWith(404);
-    expect(res.json).to.have.been.calledWith('Sale not found');
+    expect(res.json).to.have.been.calledWith({ message: 'Sale not found' });
   });
 });
