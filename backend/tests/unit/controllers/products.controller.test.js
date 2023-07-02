@@ -13,7 +13,7 @@ const {
 
 chai.use(sinonChai);
 
-describe('Realizando testes - PRODUCTS SERVICE:', function () {
+describe('Realizando testes - PRODUCTS CONTROLLER:', function () {
   afterEach(function () {
     sinon.restore();
   });
@@ -100,7 +100,7 @@ describe('Realizando testes - PRODUCTS SERVICE:', function () {
     
     await productsController.addNewProduct(req, res);
 
-    expect(res.status).to.have.been.calledWith(400);
+    expect(res.status).to.have.been.calledWith(422);
     expect(res.json).to.have.been.calledWith({ message: '"name" length must be at least 5 characters long' });
   });
 });

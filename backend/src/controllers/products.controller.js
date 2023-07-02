@@ -21,12 +21,14 @@ const addNewProduct = async (req, res) => {
 
   const { error: errorNameRequired } = nameIsRequired.validate({ name });
   if (errorNameRequired) {
-    return res.status(400).json({ message: errorNameRequired.message });
+    return res.status(mapStatusHTTP('BAD_REQUEST'))
+    .json({ message: errorNameRequired.message });
   }
 
   const { error: errorNameLength } = nameHasMinLength.validate({ name });
   if (errorNameLength) {
-    return res.status(400).json({ message: errorNameLength.message });
+    return res.status(mapStatusHTTP('INVALID_VALUE'))
+      .json({ message: errorNameLength.message });
   }
 
   const { status, data } = await productsService.addNewProduct(name);
