@@ -79,6 +79,44 @@ const newSaleFromDb = [
   },
 ];
 
+const newSaleFromDbMissingProductId = [
+  {
+    quantity: 1,
+  },
+  {
+    productId: 2,
+    quantity: 5,
+  },
+];
+
+const newSaleFromDbMissingQuantity = [
+  {
+    productId: 2,
+  },
+];
+
+const newSaleFromDbWithQuantityNegative = [
+  {
+    productId: 1,
+    quantity: -1,
+  },
+  {
+    productId: 2,
+    quantity: 5,
+  },
+];
+
+const newSaleFromDbWithProductIdError = [
+  {
+    productId: 99,
+    quantity: 1,
+  },
+  {
+    productId: 2,
+    quantity: 5,
+  },
+];
+
 const newSaleFromModel = {
   id: 3,
   itemsSold: [
@@ -100,4 +138,8 @@ module.exports = {
   saleFromModel,
   newSaleFromDb,
   newSaleFromModel,
+  newSaleFromDbMissingProductId,
+  newSaleFromDbMissingQuantity,
+  newSaleFromDbWithQuantityNegative,
+  newSaleFromDbWithProductIdError,
 };

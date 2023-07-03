@@ -11,6 +11,10 @@ const {
   saleFromModel,
   newSaleFromModel,
   newSaleFromDb,
+  newSaleFromDbMissingProductId,
+  newSaleFromDbMissingQuantity,
+  newSaleFromDbWithQuantityNegative,
+  newSaleFromDbWithProductIdError,
 } = require('../mocks/sales.mock');
 const { productsFromModel } = require('../mocks/products.mock');
 
@@ -80,5 +84,59 @@ describe('Realizando testes - SALES CONTROLLER:', function () {
 
     expect(res.status).to.have.been.calledWith(201);
     expect(res.json).to.have.been.calledWith(newSaleFromModel);
+  });
+
+  it('Adicionando uma nova venda sem o campo productId', async function () {
+    const req = { body: newSaleFromDbMissingProductId };
+    const res = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.stub(),
+    };
+    
+    await salesController.addNewSale(req, res);
+
+    expect(res.status).to.have.been.calledWith(400);
+    expect(res.json).to.have.been.calledWith({ message: '"productId" is required' });
+  });
+
+  it('Adicionando uma nova venda sem o campo quantity', async function () {
+    const req = { body: newSaleFromDbMissingQuantity };
+    const res = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.stub(),
+    };
+    
+    await salesController.addNewSale(req, res);
+
+    expect(res.status).to.have.been.calledWith(400);
+    expect(res.json).to.have.been.calledWith({ message: '"quantity" is required' });
+  });
+
+  it('Adicionando uma nova venda com o campo quantity menor que zero', async function () {
+    const req = { body: newSaleFromDbWithQuantityNegative };
+    const res = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.stub(),
+    };
+    
+    await salesController.addNewSale(req, res);
+
+    expect(res.status).to.have.been.calledWith(422);
+    expect(res.json).to.have.been.calledWith({ message: '"quantity" must be greater than or equal to 1' });
+  });
+
+  it('Adicionando uma nova venda com o campo productId inexistente', async function () {
+    sinon.stub(productsService, 'listAllProducts').resolves({ data: productsFromModel });
+
+    const req = { body: newSaleFromDbWithProductIdError };
+    const res = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.stub(),
+    };
+    
+    await salesController.addNewSale(req, res);
+
+    expect(res.status).to.have.been.calledWith(404);
+    expect(res.json).to.have.been.calledWith({ message: 'Product not found' });
   });
 });
