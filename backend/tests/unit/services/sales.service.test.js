@@ -2,7 +2,12 @@ const { expect } = require('chai');
 const sinon = require('sinon');
 const { salesModel } = require('../../../src/models');
 const { salesService } = require('../../../src/services');
-const { salesFromModel, saleFromModel } = require('../mocks/sales.mock');
+const {
+  salesFromModel,
+  saleFromModel,
+  newSaleFromModel,
+  newSaleFromDb,
+} = require('../mocks/sales.mock');
 
 describe('Realizando testes - SALES SERVICE:', function () {
   afterEach(function () {
@@ -31,5 +36,13 @@ describe('Realizando testes - SALES SERVICE:', function () {
     const response = await salesService.findById(99);
 
     expect(response).to.be.deep.equal({ status: 'NOT_FOUND', data: 'Sale not found' });
+  });
+
+  it('Adicionando uma nova venda', async function () {
+    sinon.stub(salesModel, 'addNewSale').resolves(newSaleFromModel);
+
+    const response = await salesService.addNewSale(newSaleFromDb);
+
+    expect(response).to.be.deep.equal({ status: 'CREATED', data: newSaleFromModel });
   });
 });
