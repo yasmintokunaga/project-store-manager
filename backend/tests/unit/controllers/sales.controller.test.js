@@ -4,6 +4,7 @@ const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 
 const { salesController } = require('../../../src/controllers');
+const { productsService } = require('../../../src/services');
 const { salesService } = require('../../../src/services');
 const {
   salesFromModel,
@@ -11,10 +12,11 @@ const {
   newSaleFromModel,
   newSaleFromDb,
 } = require('../mocks/sales.mock');
+const { productsFromModel } = require('../mocks/products.mock');
 
 chai.use(sinonChai);
 
-describe('Realizando testes - SALES SERVICE:', function () {
+describe('Realizando testes - SALES CONTROLLER:', function () {
   afterEach(function () {
     sinon.restore();
   });
@@ -65,9 +67,10 @@ describe('Realizando testes - SALES SERVICE:', function () {
   });
 
   it('Adicionando uma nova venda', async function () {
+    sinon.stub(productsService, 'listAllProducts').resolves({ data: productsFromModel });
     sinon.stub(salesService, 'addNewSale').resolves({ status: 'CREATED', data: newSaleFromModel });
 
-    const req = { params: newSaleFromDb };
+    const req = { body: newSaleFromDb };
     const res = {
       status: sinon.stub().returnsThis(),
       json: sinon.stub(),
