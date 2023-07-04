@@ -61,4 +61,12 @@ describe('Realizando testes - PRODUCTS MODEL:', function () {
 
     expect(updateProduct).to.be.deep.equal(updateProduct);
   });
+
+  it('Deletando um produto', async function () {
+    sinon.stub(connection, 'execute').resolves([]);
+
+    const deletedProduct = await productsModel.deleteProduct(1);
+    console.log(deletedProduct);
+    expect(deletedProduct).to.be.equal(undefined);
+  });
 });

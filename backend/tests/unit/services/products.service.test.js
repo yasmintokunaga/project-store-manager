@@ -53,4 +53,12 @@ describe('Realizando testes - PRODUCTS SERVICE:', function () {
 
     expect(response).to.be.deep.equal({ status: 'SUCCESSFUL', data: updateProductNameFromModel });
   });
+
+  it('Deletando um produto', async function () {
+    sinon.stub(productsModel, 'deleteProduct').resolves([]);
+
+    const response = await productsService.deleteProduct(1);
+
+    expect(response).to.be.deep.equal({ status: 'NO_CONTENT' });
+  });
 });
