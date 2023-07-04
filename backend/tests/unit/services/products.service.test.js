@@ -6,6 +6,7 @@ const {
   productsFromModel,
   productFromModel,
   newProductFromModel,
+  updateProductNameFromModel,
 } = require('../mocks/products.mock');
 
 describe('Realizando testes - PRODUCTS SERVICE:', function () {
@@ -43,5 +44,13 @@ describe('Realizando testes - PRODUCTS SERVICE:', function () {
     const response = await productsService.addNewProduct(newProductFromModel.name);
 
     expect(response).to.be.deep.equal({ status: 'CREATED', data: newProductFromModel });
+  });
+
+  it('Editando o nome de um produto', async function () {
+    sinon.stub(productsModel, 'updateName').resolves(updateProductNameFromModel);
+
+    const response = await productsService.updateName(1, updateProductNameFromModel.name);
+
+    expect(response).to.be.deep.equal({ status: 'SUCCESSFUL', data: updateProductNameFromModel });
   });
 });

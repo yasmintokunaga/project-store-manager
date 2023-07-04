@@ -9,6 +9,8 @@ const {
   productsFromModel,
   productFromModel,
   newProductFromModel,
+  updateProductNameFromDB,
+  updateProductNameFromModel,
 } = require('../mocks/products.mock');
 
 chai.use(sinonChai);
@@ -102,5 +104,77 @@ describe('Realizando testes - PRODUCTS CONTROLLER:', function () {
 
     expect(res.status).to.have.been.calledWith(422);
     expect(res.json).to.have.been.calledWith({ message: '"name" length must be at least 5 characters long' });
+  });
+
+  it('Editando o nome de um produto', async function () {
+    sinon.stub(productsService, 'findById')
+    .resolves({ status: 'SUCCESSFUL', data: updateProductNameFromModel });
+    sinon.stub(productsService, 'updateName')
+      .resolves({ status: 'SUCCESSFUL', data: updateProductNameFromModel });
+
+    const req = {
+      body: updateProductNameFromDB,
+      params: 1,
+    };
+    const res = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.stub(),
+    };
+    
+    await productsController.updateName(req, res);
+
+    expect(res.status).to.have.been.calledWith(200);
+    expect(res.json).to.have.been.calledWith(updateProductNameFromModel);
+  });
+
+  it('Editando o nome de um produto sem passar o campo "name"', async function () {
+    const req = {
+      body: {},
+      params: 1,
+    };
+    const res = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.stub(),
+    };
+    
+    await productsController.updateName(req, res);
+
+    expect(res.status).to.have.been.calledWith(400);
+    expect(res.json).to.have.been.calledWith({ message: '"name" is required' });
+  });
+
+  it('Editando o nome de um produto com campo "name" com menos de 5 caracteres', async function () {
+    const req = {
+      body: { name: 'ola' },
+      params: 1,
+    };
+    const res = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.stub(),
+    };
+    
+    await productsController.updateName(req, res);
+
+    expect(res.status).to.have.been.calledWith(422);
+    expect(res.json).to.have.been.calledWith({ message: '"name" length must be at least 5 characters long' });
+  });
+
+  it('Editando o nome de um produto com um id que não existe', async function () {
+    sinon.stub(productsService, 'findById')
+    .resolves({ status: 'NOT_FOUND', data: 'Product not found' });
+
+    const req = {
+      body: updateProductNameFromDB,
+      params: 100,
+    };
+    const res = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.stub(),
+    };
+    
+    await productsController.updateName(req, res);
+
+    expect(res.status).to.have.been.calledWith(404);
+    expect(res.json).to.have.been.calledWith({ message: 'Product not found' });
   });
 });

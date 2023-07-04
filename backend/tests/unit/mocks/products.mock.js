@@ -42,6 +42,15 @@ const newProductFromModel = {
   name: 'ProdutoX',
 };
 
+const updateProductNameFromDB = {
+  name: 'Martelo',
+};
+
+const updateProductNameFromModel = {
+  id: 1,
+  name: 'Martelo',
+};
+
 module.exports = {
   productsFromDB,
   productsFromModel,
@@ -49,4 +58,6 @@ module.exports = {
   productFromModel,
   newProductFromDb,
   newProductFromModel,
+  updateProductNameFromDB,
+  updateProductNameFromModel,
 };

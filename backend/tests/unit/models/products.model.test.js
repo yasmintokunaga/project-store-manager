@@ -9,6 +9,8 @@ const {
   productFromModel,
   newProductFromDb,
   newProductFromModel,
+  updateProductNameFromDB,
+  updateProductNameFromModel,
 } = require('../mocks/products.mock');
 
 describe('Realizando testes - PRODUCTS MODEL:', function () {
@@ -38,5 +40,25 @@ describe('Realizando testes - PRODUCTS MODEL:', function () {
     const newProduct = await productsModel.addNewProduct(newProductFromDb.name);
 
     expect(newProduct).to.be.deep.equal(newProductFromModel);
+  });
+
+  it('Editando o nome de um produto', async function () {
+    sinon.stub(connection, 'execute')
+      .onCall(0)
+        .resolves({
+          fieldCount: 0,
+          affectedRows: 1,
+          insertId: 0,
+          info: 'Rows matched: 1  Changed: 1  Warnings: 0',
+          serverStatus: 2,
+          warningStatus: 0,
+          changedRows: 1,
+        })
+      .onCall(1)
+        .resolves([[updateProductNameFromModel]]);
+
+    const updateProduct = await productsModel.updateName(1, updateProductNameFromDB.name);
+
+    expect(updateProduct).to.be.deep.equal(updateProduct);
   });
 });
