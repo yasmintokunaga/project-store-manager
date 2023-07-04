@@ -13,6 +13,7 @@ app.get('/products', productsController.listAllProducts);
 app.get('/products/:id', productsController.findById);
 app.post('/products', productsController.addNewProduct);
 app.put('/products/:id', productsController.updateName);
+app.delete('/products/:id', productsController.deleteProduct);
 
 app.get('/sales', salesController.listAllSales);
 app.get('/sales/:id', salesController.findById);
