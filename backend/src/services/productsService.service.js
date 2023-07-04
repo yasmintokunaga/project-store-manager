@@ -20,8 +20,15 @@ const addNewProduct = async (nameProduct) => {
   return { status: 'CREATED', data: newProduct };
 };
 
+const updateName = async (id, name) => {
+  const productUpdate = await productsModel.updateName(id, name);
+
+  return { status: 'SUCCESSFUL', data: productUpdate };
+};
+
 module.exports = {
   listAllProducts,
   findById,
   addNewProduct,
+  updateName,
 };
