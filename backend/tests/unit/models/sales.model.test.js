@@ -69,4 +69,12 @@ describe('Realizando testes - SALES MODEL:', function () {
 
     expect(newSale).to.be.deep.equal(newSaleFromModel);
   });
+
+  it('Excluindo uma venda', async function () {
+    sinon.stub(connection, 'execute').resolves([]);
+
+    const deletedSale = await salesModel.deleteSale(1);
+    
+    expect(deletedSale).to.be.equal(undefined);
+  });
 });

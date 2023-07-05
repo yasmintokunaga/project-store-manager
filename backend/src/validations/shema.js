@@ -17,9 +17,14 @@ const productIdQuantityIsRequired = Joi.object({
   quantity: Joi.number().min(1).required(),
 });
 
+const quantityIsRequired = Joi.object({
+  quantity: Joi.number().min(1).required(),
+});
+
 module.exports = {
   nameIsRequired,
   nameHasMinLength,
   productIdQuantityIsRequired,
   nameIsRequiredHasMinLength,
+  quantityIsRequired,
 };

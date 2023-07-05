@@ -45,4 +45,11 @@ describe('Realizando testes - SALES SERVICE:', function () {
 
     expect(response).to.be.deep.equal({ status: 'CREATED', data: newSaleFromModel });
   });
+
+  it('Excluindo uma venda', async function () {
+    sinon.stub(salesModel, 'deleteSale').resolves([]);
+
+    const response = await salesService.deleteSale(1);
+    expect(response).to.be.deep.equal({ status: 'NO_CONTENT' });
+  });
 });

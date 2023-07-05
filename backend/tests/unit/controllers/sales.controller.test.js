@@ -139,4 +139,36 @@ describe('Realizando testes - SALES CONTROLLER:', function () {
     expect(res.status).to.have.been.calledWith(404);
     expect(res.json).to.have.been.calledWith({ message: 'Product not found' });
   });
+
+  it('Excluindo uma venda', async function () {
+    sinon.stub(salesService, 'findById')
+      .resolves({ status: 'NOT_FOUND', data: 'Sale not found' });
+
+    const req = { params: 100 };
+    const res = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.stub(),
+    };
+
+    await salesController.deleteSale(req, res);
+  
+    expect(res.status).to.have.been.calledWith(404);
+    expect(res.json).to.have.been.calledWith({ message: 'Sale not found' });
+  });
+
+  it('Excluindo uma venda com o sale_id inexistente', async function () {
+    sinon.stub(salesService, 'findById').resolves({ status: 'SUCCESSFUL' });
+    sinon.stub(salesService, 'deleteSale').resolves({ status: 'NO_CONTENT' });
+
+    const req = { params: 1 };
+    const res = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.stub(),
+    };
+
+    await salesController.deleteSale(req, res);
+  
+    expect(res.status).to.have.been.calledWith(204);
+    expect(res.json).to.have.been.calledWith();
+  });
 });

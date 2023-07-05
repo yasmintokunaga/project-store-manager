@@ -24,9 +24,15 @@ const deleteSale = async (id) => {
   return { status: 'NO_CONTENT' };
 };
 
+const updateQuantity = async (saleId, productId, quantity) => {
+  const updatedQuantity = await salesModel.updateQuantity(saleId, productId, quantity);
+  return { status: 'SUCCESSFUL', data: updatedQuantity };
+};
+
 module.exports = {
   listAllSales,
   findById,
   addNewSale,
   deleteSale,
+  updateQuantity,
 };

@@ -1,4 +1,5 @@
 const { salesService } = require('../services');
+const { quantityIsRequired } = require('../validations/shema');
 const { validateId, validateRequiredFields } = require('../validations/validations');
 const mapStatusHTTP = require('../utils/mapStatusHTTP');
 
@@ -45,9 +46,34 @@ const deleteSale = async (req, res) => {
   res.status(mapStatusHTTP(status)).json();
 };
 
+const updateQuantity = async (req, res) => {
+  const { saleId, productId } = req.params;
+  const { quantity } = req.body;
+
+  const { error: errorQuantity } = quantityIsRequired.validate({ quantity });
+  if (errorQuantity) {
+    const { message, type } = errorQuantity.details[0];
+    return res.status(mapStatusHTTP(type === 'any.required' ? 'BAD_REQUEST' : 'INVALID_VALUE'))
+      .json({ message }); 
+  }
+
+  const verifySaleId = await salesService.findById(Number(saleId));
+  if (verifySaleId.status === 'NOT_FOUND') {
+    return res.status(mapStatusHTTP(verifySaleId.status)).json({ message: verifySaleId.data });
+  }
+  const verifyProductId = verifySaleId.data.some((sale) => sale.productId === Number(productId));
+  if (!verifyProductId) {
+    return res.status(mapStatusHTTP('NOT_FOUND')).json({ message: 'Product not found in sale' });
+  }
+
+  const { status, data } = await salesService.updateQuantity(saleId, productId, quantity);
+  return res.status(mapStatusHTTP(status)).json(data);
+};
+
 module.exports = {
   listAllSales,
   findById,
   addNewSale,
   deleteSale,
+  updateQuantity,
 };
