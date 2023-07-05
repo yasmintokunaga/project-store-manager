@@ -33,8 +33,21 @@ const addNewSale = async (req, res) => {
   return res.status(mapStatusHTTP(status)).json(data);
 };
 
+const deleteSale = async (req, res) => {
+  const { id } = req.params;
+
+  const { status: statusVerifyId, data: errorVerifyId } = await salesService.findById(id);
+  if (statusVerifyId === 'NOT_FOUND') {
+    return res.status(mapStatusHTTP(statusVerifyId)).json({ message: errorVerifyId });
+  }
+
+  const { status } = await salesService.deleteSale(id);
+  res.status(mapStatusHTTP(status)).json();
+};
+
 module.exports = {
   listAllSales,
   findById,
   addNewSale,
+  deleteSale,
 };
