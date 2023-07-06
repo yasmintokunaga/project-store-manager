@@ -11,6 +11,7 @@ const {
   newProductFromModel,
   updateProductNameFromDB,
   updateProductNameFromModel,
+  productFromDB,
 } = require('../mocks/products.mock');
 const { NOT_FOUND } = require('../mocks/serviceResponse');
 
@@ -25,10 +26,7 @@ describe('Realizando testes - PRODUCTS CONTROLLER:', function () {
     sinon.stub(productsService, 'listAllProducts').resolves({ status: 'SUCCESSFUL', data: [productsFromModel] });
 
     const req = {};
-    const res = {
-      status: sinon.stub().returnsThis(),
-      json: sinon.stub(),
-    };
+    const res = { status: sinon.stub().returnsThis(), json: sinon.stub() };
     
     await productsController.listAllProducts(req, res);
 
@@ -40,10 +38,7 @@ describe('Realizando testes - PRODUCTS CONTROLLER:', function () {
     sinon.stub(productsService, 'findById').resolves({ status: 'SUCCESSFUL', data: productFromModel });
 
     const req = { params: 1 };
-    const res = {
-      status: sinon.stub().returnsThis(),
-      json: sinon.stub(),
-    };
+    const res = { status: sinon.stub().returnsThis(), json: sinon.stub() };
     
     await productsController.findById(req, res);
 
@@ -55,10 +50,7 @@ describe('Realizando testes - PRODUCTS CONTROLLER:', function () {
     sinon.stub(productsService, 'findById').resolves(NOT_FOUND);
 
     const req = { params: 99 };
-    const res = {
-      status: sinon.stub().returnsThis(),
-      json: sinon.stub(),
-    };
+    const res = { status: sinon.stub().returnsThis(), json: sinon.stub() };
     
     await productsController.findById(req, res);
 
@@ -70,10 +62,7 @@ describe('Realizando testes - PRODUCTS CONTROLLER:', function () {
     sinon.stub(productsService, 'addNewProduct').resolves({ status: 'CREATED', data: newProductFromModel });
 
     const req = { body: { name: newProductFromModel.name } };
-    const res = {
-      status: sinon.stub().returnsThis(),
-      json: sinon.stub(),
-    };
+    const res = { status: sinon.stub().returnsThis(), json: sinon.stub() };
     
     await productsController.addNewProduct(req, res);
 
@@ -83,10 +72,7 @@ describe('Realizando testes - PRODUCTS CONTROLLER:', function () {
 
   it('Adicionando um novo produto sem passar o campo "name"', async function () {
     const req = { body: {} };
-    const res = {
-      status: sinon.stub().returnsThis(),
-      json: sinon.stub(),
-    };
+    const res = { status: sinon.stub().returnsThis(), json: sinon.stub() };
     
     await productsController.addNewProduct(req, res);
 
@@ -96,10 +82,7 @@ describe('Realizando testes - PRODUCTS CONTROLLER:', function () {
 
   it('Adicionando um novo produto com o campo "name" com menos de 5 caracteres', async function () {
     const req = { body: { name: 'ola' } };
-    const res = {
-      status: sinon.stub().returnsThis(),
-      json: sinon.stub(),
-    };
+    const res = { status: sinon.stub().returnsThis(), json: sinon.stub() };
     
     await productsController.addNewProduct(req, res);
 
@@ -117,10 +100,7 @@ describe('Realizando testes - PRODUCTS CONTROLLER:', function () {
       body: updateProductNameFromDB,
       params: 1,
     };
-    const res = {
-      status: sinon.stub().returnsThis(),
-      json: sinon.stub(),
-    };
+    const res = { status: sinon.stub().returnsThis(), json: sinon.stub() };
     
     await productsController.updateName(req, res);
 
@@ -133,10 +113,7 @@ describe('Realizando testes - PRODUCTS CONTROLLER:', function () {
       body: {},
       params: 1,
     };
-    const res = {
-      status: sinon.stub().returnsThis(),
-      json: sinon.stub(),
-    };
+    const res = { status: sinon.stub().returnsThis(), json: sinon.stub() };
     
     await productsController.updateName(req, res);
 
@@ -149,10 +126,7 @@ describe('Realizando testes - PRODUCTS CONTROLLER:', function () {
       body: { name: 'ola' },
       params: 1,
     };
-    const res = {
-      status: sinon.stub().returnsThis(),
-      json: sinon.stub(),
-    };
+    const res = { status: sinon.stub().returnsThis(), json: sinon.stub() };
     
     await productsController.updateName(req, res);
 
@@ -168,10 +142,7 @@ describe('Realizando testes - PRODUCTS CONTROLLER:', function () {
       body: updateProductNameFromDB,
       params: 100,
     };
-    const res = {
-      status: sinon.stub().returnsThis(),
-      json: sinon.stub(),
-    };
+    const res = { status: sinon.stub().returnsThis(), json: sinon.stub() };
     
     await productsController.updateName(req, res);
 
@@ -187,10 +158,7 @@ describe('Realizando testes - PRODUCTS CONTROLLER:', function () {
       .resolves({ status: 'NO_CONTENT' });
 
     const req = { params: 1 };
-    const res = {
-      status: sinon.stub().returnsThis(),
-      json: sinon.stub(),
-    };
+    const res = { status: sinon.stub().returnsThis(), json: sinon.stub() };
     
     await productsController.deleteProduct(req, res);
 
@@ -203,14 +171,50 @@ describe('Realizando testes - PRODUCTS CONTROLLER:', function () {
       .resolves(NOT_FOUND);
 
     const req = { params: 100 };
-    const res = {
-      status: sinon.stub().returnsThis(),
-      json: sinon.stub(),
-    };
+    const res = { status: sinon.stub().returnsThis(), json: sinon.stub() };
     
     await productsController.deleteProduct(req, res);
 
     expect(res.status).to.have.been.calledWith(404);
     expect(res.json).to.have.been.calledWith({ message: 'Product not found' });
+  });
+
+  it('Pesquisando um produto pelo nome', async function () {
+    sinon.stub(productsService, 'findByName')
+      .resolves({ status: 'SUCCESSFUL', data: productFromDB });
+
+    const req = { query: { q: 'Martelo' } };
+    const res = { status: sinon.stub().returnsThis(), json: sinon.stub() };
+    
+    await productsController.findByName(req, res);
+
+    expect(res.status).to.have.been.calledWith(200);
+    expect(res.json).to.have.been.calledWith(productFromDB);
+  });
+
+  it('Pesquisando um produto pelo nome sem passar o nome', async function () {
+    sinon.stub(productsService, 'listAllProducts')
+      .resolves({ status: 'SUCCESSFUL', data: productsFromModel });
+
+    const req = { query: {} };
+    const res = { status: sinon.stub().returnsThis(), json: sinon.stub() };
+    
+    await productsController.findByName(req, res);
+
+    expect(res.status).to.have.been.calledWith(200);
+    expect(res.json).to.have.been.calledWith(productsFromModel);
+  });
+
+  it('Pesquisando um produto pelo nome que não está cadastrado', async function () {
+    sinon.stub(productsService, 'findByName')
+      .resolves({ status: 'SUCCESSFUL', data: [] });
+
+    const req = { query: { q: 'Carro' } };
+    const res = { status: sinon.stub().returnsThis(), json: sinon.stub() };
+    
+    await productsController.findByName(req, res);
+
+    expect(res.status).to.have.been.calledWith(200);
+    expect(res.json).to.have.been.calledWith([]);
   });
 });

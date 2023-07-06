@@ -66,7 +66,15 @@ describe('Realizando testes - PRODUCTS MODEL:', function () {
     sinon.stub(connection, 'execute').resolves([]);
 
     const deletedProduct = await productsModel.deleteProduct(1);
-    console.log(deletedProduct);
+
     expect(deletedProduct).to.be.equal(undefined);
+  });
+
+  it('Pesquisando um produto pelo nome', async function () {
+    sinon.stub(connection, 'execute').resolves([productFromDB]);
+
+    const searchedProduct = await productsModel.findByName('Martelo');
+
+    expect(searchedProduct).to.be.deep.equal(productFromDB);
   });
 });
