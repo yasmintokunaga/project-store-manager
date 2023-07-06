@@ -9,6 +9,7 @@ app.get('/', (_request, response) => {
   response.json({ status: 'Store Manager UP!' });
 });
 
+app.get('/products/search', productsController.findByName);
 app.get('/products', productsController.listAllProducts);
 app.get('/products/:id', productsController.findById);
 app.post('/products', productsController.addNewProduct);

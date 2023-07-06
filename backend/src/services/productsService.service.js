@@ -31,10 +31,16 @@ const deleteProduct = async (id) => {
   return { status: 'NO_CONTENT' };
 };
 
+const findByName = async (name) => {
+  const listFind = await productsModel.findByName(name);
+  return { status: 'SUCCESSFUL', data: listFind };
+};
+
 module.exports = {
   listAllProducts,
   findById,
   addNewProduct,
   updateName,
   deleteProduct,
+  findByName,
 };

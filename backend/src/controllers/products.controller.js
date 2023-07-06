@@ -72,10 +72,22 @@ const deleteProduct = async (req, res) => {
   return res.status(mapStatusHTTP(status)).json();
 };
 
+const findByName = async (req, res) => {
+  const { q } = req.query;
+  if (!q) {
+    const { status, data } = await productsService.listAllProducts();
+    return res.status(mapStatusHTTP(status)).json(data);
+  }
+
+  const { status, data } = await productsService.findByName(q);
+  return res.status(mapStatusHTTP(status)).json(data);
+};
+
 module.exports = {
   listAllProducts,
   findById,
   addNewProduct,
   updateName,
   deleteProduct,
+  findByName,
 };
