@@ -7,6 +7,7 @@ const {
   saleFromModel,
   newSaleFromModel,
   newSaleFromDb,
+  saleFromModelUpdateQuantity,
 } = require('../mocks/sales.mock');
 
 describe('Realizando testes - SALES SERVICE:', function () {
@@ -51,5 +52,12 @@ describe('Realizando testes - SALES SERVICE:', function () {
 
     const response = await salesService.deleteSale(1);
     expect(response).to.be.deep.equal({ status: 'NO_CONTENT' });
+  });
+
+  it('Editando a quantidade de produtos de uma venda', async function () {
+    sinon.stub(salesModel, 'updateQuantity').resolves(saleFromModelUpdateQuantity);
+
+    const response = await salesService.updateQuantity(1, 1, 20);
+    expect(response).to.be.deep.equal({ status: 'SUCCESSFUL', data: saleFromModelUpdateQuantity });
   });
 });

@@ -69,6 +69,7 @@ const updateQuantity = async (saleId, productId, quantity) => {
   const sales = await listAllSales();
   const saleUpdate = sales
     .find((sale) => sale.productId === Number(productId) && sale.saleId === Number(saleId));
+
   return saleUpdate;
 };
 

@@ -9,6 +9,8 @@ const {
   saleFromModel,
   newSaleFromDb,
   newSaleFromModel,
+  allSalesFromModelUpdateQuantity,
+  saleFromModelUpdateQuantity,
 } = require('../mocks/sales.mock');
 
 describe('Realizando testes - SALES MODEL:', function () {
@@ -76,5 +78,26 @@ describe('Realizando testes - SALES MODEL:', function () {
     const deletedSale = await salesModel.deleteSale(1);
     
     expect(deletedSale).to.be.equal(undefined);
+  });
+
+  it('Editando a quantidade de produtos de uma venda', async function () {
+    sinon.stub(connection, 'execute')
+      .onCall(0)
+          .resolves([{
+          fieldCount: 0,
+          affectedRows: 1,
+          insertId: 0,
+          info: 'Rows matched: 1  Changed: 1  Warnings: 0',
+          serverStatus: 2,
+          warningStatus: 0,
+          changedRows: 1,
+        }])
+      .onCall(1)
+        .resolves([allSalesFromModelUpdateQuantity]);
+
+    sinon.stub(salesModel, 'listAllSales').resolves(allSalesFromModelUpdateQuantity);
+    const updatedQuantity = await salesModel.updateQuantity(1, 1, 20);
+    
+    expect(updatedQuantity).to.be.deep.equal(saleFromModelUpdateQuantity);
   });
 });

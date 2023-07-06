@@ -131,6 +131,34 @@ const newSaleFromModel = {
   ],
 };
 
+const allSalesFromModelUpdateQuantity = [
+  {
+    saleId: 1,
+    date,
+    productId: 2,
+    quantity: 20,
+  },
+  {
+    saleId: 1,
+    date,
+    productId: 1,
+    quantity: 20,
+  },
+  {
+    saleId: 2,
+    date,
+    productId: 3,
+    quantity: 20,
+  },
+];
+
+const saleFromModelUpdateQuantity = {
+  saleId: 1,
+  date,
+  productId: 1,
+  quantity: 20,
+};
+
 module.exports = {
   salesFromDB,
   salesFromModel,
@@ -142,4 +170,6 @@ module.exports = {
   newSaleFromDbMissingQuantity,
   newSaleFromDbWithQuantityNegative,
   newSaleFromDbWithProductIdError,
+  allSalesFromModelUpdateQuantity,
+  saleFromModelUpdateQuantity,
 };
